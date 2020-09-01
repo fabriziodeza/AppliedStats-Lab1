@@ -1,0 +1,124 @@
+---
+title: "Lab1"
+author: "Fabrizio Deza"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Tasks 
+
+## Task 1
+
+Find the working directory 
+
+```{r}
+getwd()
+```
+
+## Task 2
+
+Read in the DDT data 
+
+```{r}
+ddt <- read.csv("DDT.csv")
+head(ddt)
+```
+
+## Task 3
+
+  a. The qualitative variables are RIVER and SPECIES
+  b. The quantitative variables are MILE< LENGTH< WEIGHT, and DDT 
+  c. 3
+  d. Subset the ddt data set so that we see only those obs with Species,
+  LMBASS and Weight bigger than 800gms       
+```{r}
+test <- with(ddt, ddt[SPECIES=="LMBASS" & WEIGHT>800,] )
+test
+```
+e. Subset the ddt data set so that we see only those obs where the river is SCM and DDT bigger than 4.0
+```{r}
+test1 <- with(ddt, ddt[RIVER=="SCM" & DDT>4,])
+test1
+```
+
+  
+  
+## Task 4
+
+
+```{r}
+### Make a table of rivers
+tb=with(ddt, RIVER)
+tb
+
+###Make a color coded barplot of the rivers
+tbb <- table(ddt$RIVER)
+barplot(tbb, main = "Rivers", col = rainbow(4))
+
+### Make a table of the rivers crossed with the species of fish
+rf <- table(ddt$RIVER, ddt$SPECIES)
+rf
+
+### Make a barplot of the rivers crossed with the species of fish 
+barplot(rf, xlab="Number of species in each river", col=c("blue","red","green","orange"),legend=rownames(rf))
+
+```
+
+## Task 5
+
+```{r}
+### Mle a pie chart of Fish Species 
+fspec <- table(ddt$SPECIES)
+pie(fspec, col=1:3)
+
+### Make a pie chart of RIVERS 
+pie(tbb, col=1:4)
+
+```
+
+## Task 6
+
+```{r}
+### Make a boxplot of the variable DDT
+boxplot(ddt$DDT, horizontal = TRUE, ylab="Fish",xlab="DDT")
+### Make a boxplot of the variable WEIGHT
+boxplot(ddt$WEIGHT, horizontal = TRUE, ylab="Fish",xlab="Weight")
+### Make a boxplot of the variable LENGTH
+boxplot(ddt$LENGTH,horizontal = TRUE, ylab="Fish",xlab="Length")
+
+```
+
+## Task 7
+```{r}
+### Make a coplot of length vs weight given river 
+coplot(LENGTH~WEIGHT|RIVER, data=ddt)
+### Make a coplot of DDT Vs Weight given species 
+coplot(DDT~WEIGHT|SPECIES, data = ddt)
+```
+
+## Task 8
+```{r}
+library(ggplot2)
+
+p <- ggplot(ddt, aes(x=SPECIES, y=WEIGHT, fill = RIVER))+geom_boxplot(position = position_dodge(1))
+p + ggtitle("Fabrizio Deza")
+
+
+vio <- ggplot(ddt, aes(x=RIVER, y=LENGTH, fill=SPECIES))+geom_violin()
+vio + ggtitle("Fabrizio Deza")
+
+sca <- ggplot(ddt, aes(x=WEIGHT, y=LENGTH, fill = SPECIES, color=SPECIES)) + geom_point()
+sca + ggtitle("Fabrizio Deza")
+
+```
+
+
+
+
+
+
